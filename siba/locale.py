@@ -72,11 +72,11 @@ def preload_locales(loader_class: Type[FileLoader] = LoaderStrategy.JSON):
     """
     Preloads all locales into memory
     """
-
+    loader = loader_class()
     for prefix in SIBA_SETTINGS.get("prefixes", []):
         for locale in SIBA_SETTINGS.get("locales", []):
-            content = LoaderStrategy.JSON.load(
-                path.join(SIBA_SETTINGS.get("locales_path", f"{prefix}.{locale}.json")),
+            content = loader.load(
+                path.join(SIBA_SETTINGS.get("locales_path", f"{prefix}.{locale}.{loader_class.for_type()}")),
                 False
             )
             if content is None:
