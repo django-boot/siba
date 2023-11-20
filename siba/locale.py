@@ -51,9 +51,9 @@ def _get_cache_key(prefix: str, locale: str):
 def read_locale(prefix: str, locale: str, loader_class: Type[FileLoader] = LoaderStrategy.JSON) -> dict:
 
     # If cache is enable check for the value in cache
-    CACHE_KEY = _get_cache_key(prefix, locale)
-    if SIBA_SETTINGS.get("cache_locales") and CACHE_KEY in __LOCALE_CACHE:
-        return __LOCALE_CACHE.get(CACHE_KEY)
+    cache_key = _get_cache_key(prefix, locale)
+    if SIBA_SETTINGS.get("cache_locales") and cache_key in __LOCALE_CACHE:
+        return __LOCALE_CACHE.get(cache_key)
 
     # Read the file to load values
     loader = loader_class()
@@ -63,7 +63,7 @@ def read_locale(prefix: str, locale: str, loader_class: Type[FileLoader] = Loade
 
     formatted_content = format_file_content(content)
     if SIBA_SETTINGS.get("cache_locales"):
-        __LOCALE_CACHE[CACHE_KEY] = formatted_content
+        __LOCALE_CACHE[cache_key] = formatted_content
 
     return formatted_content
 
