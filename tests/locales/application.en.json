@@ -1,0 +1,12 @@
+{
+  "phrase": {
+    "hello": "Hello",
+    "welcomeMessage": "Welcome dear {username}"
+  },
+  "catCounter": {
+    "none": "You have no cats! Start to pet one.",
+    "one": "You only have a single cat! Get more pets.",
+    "some": "Glad to see you have some cats.",
+    "many": "I've never seen so many cats bein pets of a single person!"
+  }
+}

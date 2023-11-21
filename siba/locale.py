@@ -48,6 +48,8 @@ def _get_cache_key(prefix: str, locale: str):
     return f"{prefix}-{locale}"
 
 
+# This function is not be thread-safe. If preload_locales is not explicitly called at application startup
+# then this can lead to trying to cache locales multiple times
 def read_locale(prefix: str, locale: str, loader_class: Type[FileLoader] = LoaderStrategy.JSON) -> dict:
 
     # If cache is enable check for the value in cache
@@ -58,7 +60,7 @@ def read_locale(prefix: str, locale: str, loader_class: Type[FileLoader] = Loade
     # Read the file to load values
     loader = loader_class()
     content: dict = loader.load(
-        path.join(SIBA_SETTINGS.get("locales_path", f"{prefix}.{locale}.{loader.for_type()}")),
+        path.join(SIBA_SETTINGS.get("locales_path"), f"{prefix}.{locale}.{loader.for_type()}"),
     )
 
     formatted_content = format_file_content(content)
@@ -85,3 +87,11 @@ def preload_locales(loader_class: Type[FileLoader] = LoaderStrategy.JSON):
             formatted_content = format_file_content(content)
             if SIBA_SETTINGS.get("cache_locales"):
                 __LOCALE_CACHE[_get_cache_key(prefix, locale)] = formatted_content
+
+
+def clear_cached_locales():
+    __LOCALE_CACHE.clear()
+
+
+def get_cached_locales():
+    return __LOCALE_CACHE

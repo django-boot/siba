@@ -27,8 +27,8 @@ class JsonFileLoader(FileLoader):
         if not os.path.exists(filepath) and not raise_error:
             return {}
 
-        with open(filepath, "rb"):
-            data = json.load(filepath)
+        with open(filepath, "rb") as file:
+            data = json.load(file)
 
             if type(data) != dict:
                 raise ValueError("Expected the data loaded from the file to be in dictionary format (json object).")

@@ -1,5 +1,5 @@
 import logging
-
+from typing import Any
 
 logger = logging.getLogger(__name__)
 
@@ -21,7 +21,7 @@ SIBA_SETTINGS = {
 }
 
 
-def set_setting(key: str, value: str):
+def set_setting(key: str, value: Any):
     if key not in SIBA_SETTINGS:
         logger.warning(f"Siba settings don't seem to expect the key")
 
