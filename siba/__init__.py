@@ -13,6 +13,7 @@ SIBA_SETTINGS = {
     "default_prefix": "application",
     "default_locale": "en",
     "locales": ["en"],
+    "missing_variable_handler": lambda x: x,
     "pluralization": {
         "some_enabled": True,
         "some_limit": 4
