@@ -14,7 +14,7 @@ class Default(dict):
 
 def inject_variables(value: str, variables: dict):
     if variables is None:
-        return value
+        variables = {}
 
     return value.format_map(Default(variables))
 
@@ -40,7 +40,7 @@ def translate(key: str, prefix: str = None, locale: str = None, variables: dict 
         else:
             raise Exception("Unexpected situation! shouldn't get here!")
 
-        return inject_variables(str_value)
+        return inject_variables(str_value, variables)
 
     except KeyError:
         if SIBA_SETTINGS.get("error_on_unknown_key"):
