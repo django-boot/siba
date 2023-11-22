@@ -1,10 +1,12 @@
+from unittest.mock import Mock
+
 from django.test import TestCase
 from django.utils import translation
 
 from siba import set_setting
 from siba.locale import preload_locales, get_cached_locales, clear_cached_locales, read_locale
 from siba.parser import Parsable
-from siba.translation import translate
+from siba.translation import translate, translate_lazy
 
 
 class TestLocaleFile(TestCase):
@@ -34,7 +36,28 @@ class TestLocaleFile(TestCase):
         with self.assertRaises(KeyError):
             translate("phrase.hello")
 
-    def test_locale_cache(self):
+    def test_locale_cache_lazy(self):
+        set_setting("cache_locales", True)
+
+        mock = Mock()
+        mock.load.return_value = {}
+        f = lambda: mock
+        read_locale("application", "en", loader_class=f)
+        mock.load.assert_called_once()
+
+        mock = Mock()
+        mock.load.return_value = {}
+        f = lambda: mock
+        read_locale("application", "en", loader_class=f)
+        mock.load.assert_not_called()
+
+    def test_locale_cache_preload(self):
+        mock = Mock()
+        mock.load.return_value = {}
+        f = lambda: mock
+        read_locale("application", "en", loader_class=f)
+        mock.load.assert_called_once()
+
         set_setting("locales", ["en", "fa"])
         set_setting("cache_locales", True)
         preload_locales()
@@ -44,6 +67,11 @@ class TestLocaleFile(TestCase):
         self.assertIn("application-fa", locales)
         self.assertIn("phrase.hello", locales["application-en"])
         self.assertIn("phrase.hello", locales["application-fa"])
+
+        mock = Mock()
+        read_locale("application", "en", mock)
+        mock.assert_not_called()
+
         clear_cached_locales()
 
     def test_formatting(self):
@@ -57,6 +85,14 @@ class TestLocaleFile(TestCase):
         self.assertNotIn("catCounter.many", en_locales)
 
         self.assertTrue(isinstance(en_locales["catCounter"], Parsable))
+
+    def test_invalid_type(self):
+        with self.assertRaises(ValueError) as assertion:
+            read_locale("application", "fr")
+            self.assertEqual(
+                str(assertion.exception),
+                "Translation data should either be str or dictionary. Got <class 'list'>"
+            )
 
 
 class TestTranslations(TestCase):
@@ -85,6 +121,14 @@ class TestTranslations(TestCase):
         translation.activate("en")
         set_setting("missing_parameter_handler", lambda x: "test")
         self.assertEqual(translate("phrase.welcomeMessage"), "Welcome dear test.")
+
+    def test_lazy(self):
+        translation.activate("en")
+        self.assertEqual(translate_lazy("phrase.hello"), "Hello")
+
+    def test_default_locale(self):
+        translation.deactivate_all()
+        self.assertEqual(translate("phrase.hello"), "Hello")
 
     def test_pluralization(self):
         translation.activate("en")
