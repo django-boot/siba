@@ -114,7 +114,7 @@ class TestTranslations(TestCase):
 
     def test_parameter_injection(self):
         translation.activate("en")
-        value = translate("phrase.welcomeMessage", variables={"username": "siba"})
+        value = translate("phrase.welcomeMessage", parameters={"username": "siba"})
         self.assertEqual(value, "Welcome dear siba.")
 
     def test_missing_parameter_handler(self):

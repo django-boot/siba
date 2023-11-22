@@ -19,7 +19,7 @@ def inject_parameters(value: str, variables: dict):
     return value.format_map(Default(variables))
 
 
-def translate(key: str, prefix: str = None, locale: str = None, variables: dict = None, **kwargs):
+def translate(key: str, prefix: str = None, locale: str = None, parameters: dict = None, **kwargs):
     prefix = SIBA_SETTINGS.get("default_prefix") if prefix is None else prefix
     locale = locale if locale is not None else translation.get_language()
     if locale is None:
@@ -40,7 +40,7 @@ def translate(key: str, prefix: str = None, locale: str = None, variables: dict 
         else:
             raise Exception("Unexpected situation! shouldn't get here!")
 
-        return inject_parameters(str_value, variables)
+        return inject_parameters(str_value, parameters)
 
     except KeyError:
         if SIBA_SETTINGS.get("error_on_unknown_key"):
