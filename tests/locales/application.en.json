@@ -1,7 +1,7 @@
 {
   "phrase": {
     "hello": "Hello",
-    "welcomeMessage": "Welcome dear {username}"
+    "welcomeMessage": "Welcome dear {username}."
   },
   "catCounter": {
     "none": "You have no cats! Start to pet one.",

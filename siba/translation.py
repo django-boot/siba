@@ -8,11 +8,11 @@ from siba.parser import Parsable
 
 class Default(dict):
     def __missing__(self, key):
-        missing_variable_handler = SIBA_SETTINGS.get("missing_variable_handler")
-        return missing_variable_handler(key)
+        missing_parameter_handler = SIBA_SETTINGS.get("missing_parameter_handler")
+        return missing_parameter_handler(key)
 
 
-def inject_variables(value: str, variables: dict):
+def inject_parameters(value: str, variables: dict):
     if variables is None:
         variables = {}
 
@@ -40,7 +40,7 @@ def translate(key: str, prefix: str = None, locale: str = None, variables: dict 
         else:
             raise Exception("Unexpected situation! shouldn't get here!")
 
-        return inject_variables(str_value, variables)
+        return inject_parameters(str_value, variables)
 
     except KeyError:
         if SIBA_SETTINGS.get("error_on_unknown_key"):

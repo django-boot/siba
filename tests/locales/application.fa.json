@@ -1,7 +1,7 @@
 {
   "phrase": {
     "hello": "درود",
-    "welcomeMessage": "{username} عزیز، خوش آمدید"
+    "welcomeMessage": "{username} عزیز، خوش آمدید."
   },
   "catCounter": {
     "none": "گربه ای نداری. یه گربه رو قبول کن.",

@@ -6,6 +6,7 @@ logger = logging.getLogger(__name__)
 
 SIBA_SETTINGS = {
     "error_on_unknown_key": False,
+    "error_on_missing_locale_file": True,
     "key_split_delimiter": ".",
     "locales_path": None,
     "cache_locales": True,
@@ -13,7 +14,7 @@ SIBA_SETTINGS = {
     "default_prefix": "application",
     "default_locale": "en",
     "locales": ["en"],
-    "missing_variable_handler": lambda x: x,
+    "missing_parameter_handler": lambda x: x,
     "pluralization": {
         "some_enabled": True,
         "some_limit": 4
@@ -30,6 +31,4 @@ def set_setting(key: str, value: Any):
 
 def get_setting(key: str):
     return SIBA_SETTINGS.get(key)
-
-
 

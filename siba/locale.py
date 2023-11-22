@@ -61,6 +61,7 @@ def read_locale(prefix: str, locale: str, loader_class: Type[FileLoader] = Loade
     loader = loader_class()
     content: dict = loader.load(
         path.join(SIBA_SETTINGS.get("locales_path"), f"{prefix}.{locale}.{loader.for_type()}"),
+        SIBA_SETTINGS.get("error_on_missing_locale_file", True)
     )
 
     formatted_content = format_file_content(content)
@@ -74,19 +75,21 @@ def preload_locales(loader_class: Type[FileLoader] = LoaderStrategy.JSON):
     """
     Preloads all locales into memory
     """
+    if not SIBA_SETTINGS.get("cache_locales"):
+        return
+
     loader = loader_class()
     for prefix in SIBA_SETTINGS.get("prefixes", []):
         for locale in SIBA_SETTINGS.get("locales", []):
             content = loader.load(
-                path.join(SIBA_SETTINGS.get("locales_path", f"{prefix}.{locale}.{loader_class.for_type()}")),
+                path.join(SIBA_SETTINGS.get("locales_path"), f"{prefix}.{locale}.{loader_class.for_type()}"),
                 False
             )
             if content is None:
                 continue
 
             formatted_content = format_file_content(content)
-            if SIBA_SETTINGS.get("cache_locales"):
-                __LOCALE_CACHE[_get_cache_key(prefix, locale)] = formatted_content
+            __LOCALE_CACHE[_get_cache_key(prefix, locale)] = formatted_content
 
 
 def clear_cached_locales():
