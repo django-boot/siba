@@ -1,5 +1,7 @@
 # Siba
 
+[![PyPI - Version](https://img.shields.io/pypi/v/django-boot-siba?style=flat-square)](https://pypi.org/project/django-boot-siba/)
+
 Siba (coming from [_Sibawayh_](https://en.wikipedia.org/wiki/Sibawayh)) is a Django translation tool that uses `json` files instead of `gettext (po, mo)`.
 
 **Features**:
